@@ -23,7 +23,7 @@ end
 --draws the objects we loaded above and prints the info I want
 function love.draw(dt)
     love.graphics.draw(backgroundimg, 0, 0)
-    love.graphics.draw(foregroundimg, 0, 775)
+    love.graphics.draw(foregroundimg, 0, 700)
     love.graphics.draw(player.img, player.x, player.y)
     
     love.graphics.print("X Mouse Position: " .. xmousepos, 50, 50)
