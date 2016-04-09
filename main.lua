@@ -7,8 +7,7 @@ function love.load(arg)
 --player = { x = width - (width - 0), y = height - (height - 500), acceleration = 200, velY = 1, velX = 1, img = nil}
 
 -- loads the two backgrounds and the player
-backgroundimg = love.graphics.newImage('assets/background.png')
-foregroundimg = love.graphics.newImage('assets/fore.png')
+backgroundimg = love.graphics.newImage('assets/background.jpg')
 
 playerimg = love.graphics.newImage('assets/sitting.png')
 bunnyImg = love.graphics.newImage('assets/bunny.png')
@@ -44,7 +43,6 @@ end
 --draws the objects we loaded above and prints the info I want
 function love.draw(dt)
     love.graphics.draw(backgroundimg, 0, 0)
-    love.graphics.draw(foregroundimg, 0, 560)
     love.graphics.draw(player.img, player.x, player.y, player.heading, 1, 1, offsetX, offsetY)
     love.graphics.draw(bunnyImg, 900, 500)
 
