@@ -11,6 +11,7 @@ backgroundimg = love.graphics.newImage('assets/background.png')
 foregroundimg = love.graphics.newImage('assets/fore.png')
 
 playerimg = love.graphics.newImage('assets/sitting.png')
+bunnyImg = love.graphics.newImage('assets/bunny.png')
 
 offsetX = playerimg:getWidth() / 2
 offsetY = playerimg:getHeight() / 2
@@ -45,6 +46,7 @@ function love.draw(dt)
     love.graphics.draw(backgroundimg, 0, 0)
     love.graphics.draw(foregroundimg, 0, 560)
     love.graphics.draw(player.img, player.x, player.y, player.heading, 1, 1, offsetX, offsetY)
+    love.graphics.draw(bunnyImg, 900, 500)
 
 
     love.graphics.print("X Mouse Position: " .. xmousepos, 200, 20)
