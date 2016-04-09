@@ -171,7 +171,7 @@ function love.update(dt)
      end
    end
    if done then
-     if player.x > 800 and player.x < 1050 then
+     if player.x > 700 and player.x < 1050 then
        win = true
      else
       lose = true
