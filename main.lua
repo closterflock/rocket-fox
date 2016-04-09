@@ -8,9 +8,10 @@ function love.load(arg)
     -- loads the two backgrounds and the player
     backgroundimg = love.graphics.newImage('assets/background.jpg')
 
-    local playerFrameX = 250
-    local playerFrameY = 120
+    playerFrameX = 250
+    playerFrameY = 120
     local playerImage = love.graphics.newImage('assets/idle.png')
+    flyingImage = love.graphics.newImage('assets/flying.png')
     local g = anim8.newGrid(playerFrameX, playerFrameY, playerImage:getWidth(), playerImage:getHeight())
     animation = anim8.newAnimation(g(1,'1-60', 1, '60-1'), (1 / 25))
 
@@ -127,7 +128,9 @@ function love.mousereleased(x, y, button)
       mousex = x
       mousey = y
       jump = true
-      animation:pause()
+      player.image = flyingImage
+      newG = anim8.newGrid(playerFrameX, playerFrameY, player.image:getWidth(), player.image:getHeight())
+      animation = anim8.newAnimation(newG(1,'1-60'), (1 / 120), 'pauseAtEnd')
    end
 end
 
