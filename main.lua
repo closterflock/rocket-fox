@@ -127,6 +127,7 @@ function love.mousereleased(x, y, button)
       mousex = x
       mousey = y
       jump = true
+      animation:pause()
    end
 end
 
