@@ -53,12 +53,16 @@ end
 --draws the objects we loaded above and prints the info I want
 function love.draw(dt)
     love.graphics.draw(backgroundimg)
-    love.graphics.draw(bunnyImg, 900, 500)
     animation:draw(player.image, player.x, player.y, 0, 1, 1, offsetX, offsetY)
+    love.graphics.print("https://github.com/spantz/rocket-fox", 10, 0)
 
     if win then
       love.graphics.print("KILLED THAT BASTARD", 650, 20)
-    elseif lose then
+    else
+        love.graphics.draw(bunnyImg, 900, 500)
+    end
+
+    if lose then
       love.graphics.print("Missed, Idiot", 650, 20)
     end
 
