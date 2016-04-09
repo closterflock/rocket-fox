@@ -21,7 +21,7 @@ function love.load(arg)
 
     player = {
         x = offsetX,
-        y = 500,
+        y = 504,
         image = playerImage,
         heading = 0,
         velX = 1,
