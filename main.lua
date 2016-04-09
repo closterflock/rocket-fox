@@ -1,51 +1,54 @@
+anim8 = require 'anim8'
+
 function love.load(arg)
 
-  width = love.graphics.getWidth()
-  height = love.graphics.getHeight()
+    width = love.graphics.getWidth()
+    height = love.graphics.getHeight()
 
---for the player class
---player = { x = width - (width - 0), y = height - (height - 500), acceleration = 200, velY = 1, velX = 1, img = nil}
+    -- loads the two backgrounds and the player
+    backgroundimg = love.graphics.newImage('assets/background.jpg')
 
--- loads the two backgrounds and the player
-backgroundimg = love.graphics.newImage('assets/background.jpg')
+    local playerFrameX = 250
+    local playerFrameY = 120
+    local playerImage = love.graphics.newImage('assets/idle.png')
+    local g = anim8.newGrid(playerFrameX, playerFrameY, playerImage:getWidth(), playerImage:getHeight())
+    animation = anim8.newAnimation(g(1,'1-60', 1, '60-1'), (1 / 25))
 
-playerimg = love.graphics.newImage('assets/sitting.png')
-bunnyImg = love.graphics.newImage('assets/bunny.png')
+    bunnyImg = love.graphics.newImage('assets/bunny.png')
 
-offsetX = playerimg:getWidth() / 2
-offsetY = playerimg:getHeight() / 2
+    offsetX = playerFrameX / 2
+    offsetY = playerFrameY / 2
 
-player = {
-  x = width - (width - 0) + offsetX,
-  y = height - (height - 500) + offsetY,
-  img = playerimg,
-  heading = 0,
-  velX = 1,
-  velY = 1,
-  acceleration = 20,
-}
+    player = {
+        x = offsetX,
+        y = 500,
+        image = playerImage,
+        heading = 0,
+        velX = 1,
+        velY = 1,
+        acceleration = 20,
+    }
 
-startingX = player.x
-startingY = player.y
+    startingX = player.x
+    startingY = player.y
 
---set the count
- --set the count
-mousepos = 0
-jump = false
-firstloop = true
-launchvel = 0
-mousex = 1
-mousey = 1
-angledeg = 0
+    --set the count
+    --set the count
+    mousepos = 0
+    jump = false
+    firstloop = true
+    launchvel = 0
+    mousex = 1
+    mousey = 1
+    angledeg = 0
 
 end
 
 --draws the objects we loaded above and prints the info I want
 function love.draw(dt)
-    love.graphics.draw(backgroundimg, 0, 0)
-    love.graphics.draw(player.img, player.x, player.y, player.heading, 1, 1, offsetX, offsetY)
+    love.graphics.draw(backgroundimg)
     love.graphics.draw(bunnyImg, 900, 500)
-
+    animation:draw(player.image, player.x, player.y, 0, 1, 1, offsetX, offsetY)
 
     love.graphics.print("X Mouse Position: " .. xmousepos, 200, 20)
     love.graphics.print("Y Mouse Position: " .. ymousepos, 200, 40)
@@ -71,6 +74,7 @@ end
 
 -- Updating
 function love.update(dt)
+    animation:update(dt)
 	-- I always start with an easy way to exit the game
 	if love.keyboard.isDown('escape') then
 		love.event.push('quit')
@@ -122,7 +126,7 @@ function love.mousereleased(x, y, button)
    if button == 1 then
       mousex = x
       mousey = y
-     jump = true
+    --  jump = true
    end
 end
 
