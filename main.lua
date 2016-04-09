@@ -2,17 +2,17 @@
 
 function love.load(arg)
     
-    
     width = love.graphics.getWidth()
     height = love.graphics.getHeight()
 
 --for the player class
-player = { x = width - (width - 0), y = height - (height - 500), acceleration = 1, vely = 1, velx = 1, img = nil}
+    player = { x = width - (width - 0), y = height - (height - 500), acceleration = 1, vely = 1, velx = 1, img = nil}
 
--- loads the two backgrounds and the player
-player.img = love.graphics.newImage('assets/sitting.png')
+-- loads the two backgrounds the player and the bunny
+    player.img = love.graphics.newImage('assets/sitting.png')
     backgroundimg = love.graphics.newImage('assets/background.png')
     foregroundimg = love.graphics.newImage('assets/fore.png')
+    bunnyImg = love.graphics.newImage('assets/bunny.png')
 --set the count 
  --set the count 
     mousepos = 0
@@ -30,6 +30,7 @@ function love.draw(dt)
     love.graphics.draw(backgroundimg, 0, 0)
     love.graphics.draw(foregroundimg, 0, 560)
     love.graphics.draw(player.img, player.x, player.y)
+    love.graphics.draw(bunnyImg, 900, 500)
     
     love.graphics.print("X Mouse Position: " .. xmousepos, 50, 50)
     love.graphics.print("Y Mouse Position: " .. ymousepos, 50, 70)
