@@ -66,7 +66,7 @@ function love.draw(dt)
     love.graphics.print("degangle:       " .. degangle, 650, 90)
 
     if jump then
-    love.graphics.print("Jumping", 50, 210)
+        love.graphics.print("Jumping", 50, 210)
     end
 
     love.graphics.line(startingX, startingY, mousex, mousey)
@@ -126,7 +126,7 @@ function love.mousereleased(x, y, button)
    if button == 1 then
       mousex = x
       mousey = y
-    --  jump = true
+      jump = true
    end
 end
 
