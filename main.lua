@@ -1,7 +1,18 @@
    
---for the player class
-player = { x = 90, y = 690, acceleration = 1, vely = 1, velx = 1, img = nil}
 
+function love.load(arg)
+    
+    
+    width = love.graphics.getWidth()
+    height = love.graphics.getHeight()
+
+--for the player class
+player = { x = width - (width - 0), y = height - (height - 500), acceleration = 1, vely = 1, velx = 1, img = nil}
+
+-- loads the two backgrounds and the player
+player.img = love.graphics.newImage('assets/sitting.png')
+    backgroundimg = love.graphics.newImage('assets/background.png')
+    foregroundimg = love.graphics.newImage('assets/fore.png')
 --set the count 
  --set the count 
     mousepos = 0
@@ -11,19 +22,13 @@ player = { x = 90, y = 690, acceleration = 1, vely = 1, velx = 1, img = nil}
    mousex = 1
    mousey = 1
 
--- loads the two backgrounds and the player
-function love.load(arg)
-    
-    player.img = love.graphics.newImage('assets/sitting.png')
-    backgroundimg = love.graphics.newImage('assets/a.jpg')
-    foregroundimg = love.graphics.newImage('assets/fore.png')
 
 end
 
 --draws the objects we loaded above and prints the info I want
 function love.draw(dt)
     love.graphics.draw(backgroundimg, 0, 0)
-    love.graphics.draw(foregroundimg, 0, 700)
+    love.graphics.draw(foregroundimg, 0, 560)
     love.graphics.draw(player.img, player.x, player.y)
     
     love.graphics.print("X Mouse Position: " .. xmousepos, 50, 50)
