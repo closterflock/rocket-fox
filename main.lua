@@ -46,6 +46,8 @@ function love.load(arg)
     mousey = 1
     angledeg = 0
 
+    love.graphics.setNewFont(30)
+
 end
 
 --draws the objects we loaded above and prints the info I want
@@ -55,9 +57,9 @@ function love.draw(dt)
     animation:draw(player.image, player.x, player.y, 0, 1, 1, offsetX, offsetY)
 
     if win then
-      love.graphics.print("KILLED THAT BASTARD", 650, 20, 0, 2)
+      love.graphics.print("KILLED THAT BASTARD", 650, 20)
     elseif lose then
-      love.graphics.print("Missed, Idiot", 650, 20, 0, 2)
+      love.graphics.print("Missed, Idiot", 650, 20)
     end
 
     -- love.graphics.print("X Mouse Position: " .. xmousepos, 200, 20)
