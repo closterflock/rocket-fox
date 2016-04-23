@@ -147,8 +147,8 @@ function love.update(dt)
     angle = (math.angle(offsetX,offsetY,mousex,mousey))
     degangle = math.deg(angle)
 
-    player.heading = getHeadingOfFox(player.x, player.y, xmousepos, ymousepos)
     if jump then
+        player.heading = getHeadingOfFox(player.x, player.y, xmousepos, ymousepos)
         if love.mouse.isDown(1) then
             boostTowardsMouse(xmousepos, ymousepos, dt)
         end
