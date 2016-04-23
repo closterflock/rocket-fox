@@ -143,6 +143,8 @@ function love.update(dt)
     angle = (math.angle(offsetX,offsetY,mousex,mousey))
     degangle = math.deg(angle)
     player.heading = getAngleOfMouse(player.x, player.y, xmousepos, ymousepos)
+    player.heading = getHeadingOfFox(player.x, player.y, xmousepos, ymousepos)
+
     if jump then
       player.img = love.graphics.newImage('assets/flying.png')
       if looping then
@@ -199,21 +201,21 @@ function love.mousereleased(x, y, button)
    end
 end
 
-function getAngleOfMouse(imageX, imageY, mouseX, mouseY)
-    local opposite = mouseY - imageY
-    local adjacent = mouseX - imageX
-    local radians = math.atan(opposite / adjacent)
-    local angle = math.deg(radians)
+function getHeadingOfFox(playerX, playerY, mouseX, mouseY)
+    local yDiff = mouseY - playerY
+    local xDiff = mouseX - playerX
+    local heading = math.atan(yDiff / xDiff)
 
-    -- print(angle)
-    -- print (imageX)
-    -- print (mouseX)
-    -- print (imageY)
-    -- print (mouseY)
-    -- print (opposite)
-    -- print(distance)
+    if xDiff < 0 then
+        local radiansToAdd = math.rad(90)
+        if yDiff < 0 and heading > 0 then
+            heading = (radiansToAdd * -1) - (radiansToAdd - heading)
+        elseif yDiff > 0 and heading < 0 then
+            heading = (radiansToAdd + (radiansToAdd + heading))
+        end
+    end
 
-    return radians, angle
+    return heading, yDiff, xDiff
 end
 
 function math.angle(x1,y1, x2,y2) return math.atan2(y2-y1, x2-x1) end
