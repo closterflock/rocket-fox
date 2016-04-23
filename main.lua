@@ -142,10 +142,10 @@ function love.update(dt)
     velocity = (math.dist(offsetX,offsetY,mousex,mousey))
     angle = (math.angle(offsetX,offsetY,mousex,mousey))
     degangle = math.deg(angle)
-    player.heading = getHeadingOfFox(player.x, player.y, xmousepos, ymousepos)
 
     if jump then
       player.img = love.graphics.newImage('assets/flying.png')
+      player.heading = getHeadingOfFox(player.x, player.y, xmousepos, ymousepos)
       if looping then
         player.velY = player.velY + (-1500 * dt)
         moveFox(dt)
