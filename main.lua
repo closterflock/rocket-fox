@@ -1,21 +1,37 @@
 anim8 = require 'anim8'
 
 function love.load(arg)
+  bunny1up = true
+  bunny1down = false
+  bunny1left = true
+  bunny1right = false
+  bunny1alive = true
+
+  mousepos = 0
+  standing = true
+  slingshot = false
+  flying = false
+  done = false
+  firstloop = true
+  launchvel = 0
+  mousex = 1
+  mousey = 1
+  angledeg = 0
+
+  playerFrameX = 250
+  playerFrameY = 120
 
     width = love.graphics.getWidth()
     height = love.graphics.getHeight()
 
     -- loads the two backgrounds and the player
     backgroundimg = love.graphics.newImage('assets/background.jpg')
+    bunnyImg = love.graphics.newImage('assets/bunny.png')
 
-    playerFrameX = 250
-    playerFrameY = 120
     local playerImage = love.graphics.newImage('assets/idle.png')
     flyingImage = love.graphics.newImage('assets/flying.png')
     local g = anim8.newGrid(playerFrameX, playerFrameY, playerImage:getWidth(), playerImage:getHeight())
     animation = anim8.newAnimation(g(1,'1-60', 1, '60-1'), (1 / 25))
-
-    bunnyImg = love.graphics.newImage('assets/bunny.png')
 
     offsetX = playerFrameX / 2
     offsetY = playerFrameY / 2
@@ -28,23 +44,18 @@ function love.load(arg)
         velX = 1,
         velY = 1,
         acceleration = 20,
-    }
+        }
 
-    win = false
-    lose = false
+    bunny1 = {
+        x = 1050,
+        y = 94,
+        image = bunnyImg,
+        VelX = 50,
+        VelY = 50,
+    }
 
     startingX = player.x
     startingY = player.y
-
-    --set the count
-    --set the count
-    mousepos = 0
-    jump = false
-    firstloop = true
-    launchvel = 0
-    mousex = 1
-    mousey = 1
-    angledeg = 0
 
     love.graphics.setNewFont(30)
 
@@ -53,83 +64,36 @@ end
 --draws the objects we loaded above and prints the info I want
 function love.draw(dt)
     love.graphics.draw(backgroundimg)
+    love.graphics.draw(bunnyImg, bunny1.x, bunny1.y)
+
     animation:draw(player.image, player.x, player.y, 0, 1, 1, offsetX, offsetY)
     love.graphics.print("https://github.com/spantz/rocket-fox", 10, 0)
 
-    if win then
-      love.graphics.print("KILLED THAT BASTARD", 650, 20)
-    else
-        love.graphics.draw(bunnyImg, 900, 500)
-    end
 
-    if lose then
-      love.graphics.print("Missed, Idiot", 650, 20)
-    end
-
-    -- love.graphics.print("X Mouse Position: " .. xmousepos, 200, 20)
-    -- love.graphics.print("Y Mouse Position: " .. ymousepos, 200, 40)
-    -- love.graphics.print("End x Pos: " .. mousex, 200, 60)
-    -- love.graphics.print("End y Pos: " .. mousey, 200, 80)
-    -- love.graphics.print("Velocity: " .. velocity, 200, 100)
-    -- love.graphics.print("Angle: " .. angle, 200, 120)
-    -- love.graphics.print("Xposition: " .. player.x, 350, 20)
-    -- love.graphics.print("Yposition: " .. player.y, 350, 40)
-    -- love.graphics.print("Heading  : " .. player.heading, 350, 60)
+  --  love.graphics.print("Standing: " .. standing, 350, 40)
+    --love.graphics.print("Slingshot  : " .. slingshot, 350, 60)
     --
-    -- love.graphics.print("LaunchVel:  " .. launchvel, 650, 20)
+    --love.graphics.print("Flying:  " .. flying, 650, 20)
     -- love.graphics.print("Yvel:       " .. player.velY, 650, 50)
     -- love.graphics.print("xvel:       " .. player.velX, 650, 70)
     -- love.graphics.print("degangle:       " .. degangle, 650, 90)
+
+    --love.graphics.print("X Mouse Position: " .. xmousepos, 200, 20)
+    love.graphics.print(": " .. bunny1.x, 200, 40)
+   -- love.graphics.print("End x Pos: " .. mousex, 200, 60)
+   -- love.graphics.print("End y Pos: " .. mousey, 200, 80)
+   -- love.graphics.print("Velocity: " .. velocity, 200, 100)
     --
-    -- if jump then
-    --     love.graphics.print("Jumping", 50, 210)
-    -- end
+    if standing then
+         love.graphics.print("Standing: ", 400, 40)
+    elseif slingshot then
+         love.graphics.print("slingshot: ", 400, 40)
+       elseif flying then
+         love.graphics.print("flying: ", 400, 40)
+    end
     --
     -- love.graphics.line(startingX, startingY, mousex, mousey)
 end
-
--- Updating
--- function love.update(dt)
---     animation:update(dt)
--- 	-- I always start with an easy way to exit the game
--- 	if love.keyboard.isDown('escape') then
--- 		love.event.push('quit')
--- 	end
---
---     xmousepos = love.mouse.getX()
---     ymousepos = love.mouse.getY()
---
---     velocity = (math.dist(offsetX,offsetY,mousex,mousey))
---     angle = (math.angle(offsetX,offsetY,mousex,mousey))
---
---     degangle = math.deg(angle)
---
---     if jump then
---       player.img = love.graphics.newImage('assets/flying.png')
---
---       -- radsin = math.sin(angle)
---       -- degsin = math.deg(radsin)
---       --
---       -- radcos = math.cos(angle)
---       -- degcos = math.deg(radcos)
---
---       if firstloop then
---         player.velY = 3*(startingY - mousey)
---         player.velX = 2*(mousex - startingX)
---         firstloop = false
---       else
---         player.velY = player.velY + (-1500 * dt)
---
---       -- player.velX = (radsin * player.acceleration * dt)
---     	-- player.velY = (radcos * -player.acceleration * dt)
---
---       -- player.velX = (player.velX * player.acceleration * dt)
---     	-- player.velY = (player.velY * -player.acceleration * dt)
---       moveFox(dt)
---    end
---
---     end
--- end
 
 function love.update(dt)
     animation:update(dt)
@@ -137,12 +101,16 @@ function love.update(dt)
      if love.keyboard.isDown('escape') then
         love.event.push('quit')
      end
+
+     movebunnys(dt)
+
     xmousepos = love.mouse.getX()
     ymousepos = love.mouse.getY()
     velocity = (math.dist(offsetX,offsetY,mousex,mousey))
     angle = (math.angle(offsetX,offsetY,mousex,mousey))
     degangle = math.deg(angle)
-    if jump then
+
+    if flying then
       player.img = love.graphics.newImage('assets/flying.png')
       if looping then
         player.velY = player.velY + (-1500 * dt)
@@ -153,12 +121,12 @@ function love.update(dt)
         end
       end
       if firstloop then
-          player.velY = 3*(startingY - mousey)
-          player.velX = 3*(mousex - startingX)
+          player.velY = -8*(startingY - mousey)
+          player.velX = -8*(mousex - startingX)
           startingVelY = player.velY
-          if player.velX < 800 then
-            player.velX = player.velX
-          elseif player.velX > 800 then
+          if player.velX > -800 then
+            player.velX = 1*player.velX
+          elseif player.velX < -800 then
             player.velX = 800
           end
           if player.velY < 1000 then
@@ -171,13 +139,12 @@ function love.update(dt)
      end
    end
    if done then
-     if player.x > 700 and player.x < 1050 then
-       win = true
-     else
-      lose = true
-    end
+     flying = false
+     done = true
   end
 end
+
+
 
 function moveFox(dt)
     player.x = player.x + player.velX * dt
@@ -185,17 +152,74 @@ function moveFox(dt)
 
 end
 
+function movebunnys(dt)
+if player.x > (bunny1.x -50) and player.y < (bunny1.x +50) and player.y > (bunny1.y -50) and player.y < (bunny1.y +50) then
+  bunny1alive = false
+else if bunny1alive then
+  if bunny1up then
+    bunny1.y = (bunny1.y - bunny1.VelY * dt)
+  elseif bunny1down then
+    bunny1.y = (bunny1.y + bunny1.VelY * dt)
+  end
+
+  if bunny1.y > 200 and bunny1down then
+    bunny1up = true
+    bunny1down = true
+  elseif bunny1.y < 0 and bunny1up then
+    bunny1up = false
+    bunny1down = true
+  end
+
+  if bunny1left then
+    bunny1.x = (bunny1.x - bunny1.VelX * dt)
+  elseif bunny1right then
+    bunny1.x = (bunny1.x + bunny1.VelX * dt)
+  end
+
+  if bunny1.x > 1050 and bunny1right then
+    bunny1left = true
+    bunny1right = false
+    bunnyImg = love.graphics.newImage('assets/bunny.png')
+  elseif bunny1.x < 34 and bunny1left then
+    bunny1left = false
+    bunny1right = true
+    bunnyImg = love.graphics.newImage('assets/reversebunny.png')
+  end
+end
+end
+
+
+
+
+end
+
+function love.mousepressed(x, y, button, istouch)
+  if button == 1 then -- the primary button
+    if standing then
+      if xmousepos > player.x - 250 and xmousepos < player.x + 250 and ymousepos > 460 and ymousepos < 560 then
+          standing = false
+          slingshot = true
+        else
+        end
+      else
+      end
+    end
+end
+
 --gets the position of mouse release
 function love.mousereleased(x, y, button)
-   if button == 1 then
-       print('MOUSE RELEASE')
+  if button == 1 then
+    if slingshot then
       mousex = x
       mousey = y
-      jump = true
+      slingshot = false
+      flying = true
       player.image = flyingImage
       newG = anim8.newGrid(playerFrameX, playerFrameY, player.image:getWidth(), player.image:getHeight())
       animation = anim8.newAnimation(newG(1,'1-60'), (1 / 120), 'pauseAtEnd')
-   end
+    end
+  else
+  end
 end
 
 function math.angle(x1,y1, x2,y2) return math.atan2(y2-y1, x2-x1) end
