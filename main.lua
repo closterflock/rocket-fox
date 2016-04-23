@@ -154,7 +154,7 @@ function love.update(dt)
         end
       player.img = love.graphics.newImage('assets/flying.png')
       if looping then
-        player.velY = player.velY + (-1500 * dt)
+        player.velY = player.velY + (-500 * dt)
         moveFox(dt)
         if player.y > 550 then
           looping = false
@@ -162,8 +162,8 @@ function love.update(dt)
         end
       end
       if firstloop then
-          player.velY = 3*(startingY - mousey)
-          player.velX = 3*(mousex - startingX)
+          player.velY = 1.25 * (startingY - mousey)
+          player.velX = 1.25 * (mousex - startingX)
           startingVelY = player.velY
           if player.velX < 800 then
             player.velX = player.velX
