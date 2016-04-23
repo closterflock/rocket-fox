@@ -194,13 +194,9 @@ end
 --gets the position of mouse release
 function love.mousereleased(x, y, button)
    if button == 1 then
-       print('MOUSE RELEASE')
       mousex = x
       mousey = y
       jump = true
-      player.image = flyingImage
-      newG = anim8.newGrid(playerFrameX, playerFrameY, player.image:getWidth(), player.image:getHeight())
-      animation = anim8.newAnimation(newG(1,'1-60'), (1 / 120), 'pauseAtEnd')
    end
 end
 
