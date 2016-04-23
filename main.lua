@@ -198,6 +198,23 @@ function love.mousereleased(x, y, button)
    end
 end
 
+function getAngleOfMouse(imageX, imageY, mouseX, mouseY)
+    local opposite = mouseY - imageY
+    local adjacent = mouseX - imageX
+    local radians = math.atan(opposite / adjacent)
+    local angle = math.deg(radians)
+
+    -- print(angle)
+    -- print (imageX)
+    -- print (mouseX)
+    -- print (imageY)
+    -- print (mouseY)
+    -- print (opposite)
+    -- print(distance)
+
+    return radians, angle
+end
+
 function math.angle(x1,y1, x2,y2) return math.atan2(y2-y1, x2-x1) end
 
 function math.dist(x1,y1, x2,y2)
