@@ -53,7 +53,7 @@ end
 --draws the objects we loaded above and prints the info I want
 function love.draw(dt)
     love.graphics.draw(backgroundimg)
-    animation:draw(player.image, player.x, player.y, 0, 1, 1, offsetX, offsetY)
+    animation:draw(player.image, player.x, player.y, player.heading, 1, 1, offsetX, offsetY)
     love.graphics.print("https://github.com/spantz/rocket-fox", 10, 0)
 
     if win then
@@ -85,7 +85,7 @@ function love.draw(dt)
     --     love.graphics.print("Jumping", 50, 210)
     -- end
     --
-    -- love.graphics.line(startingX, startingY, mousex, mousey)
+    love.graphics.line(player.x, player.y, love.mouse.getX(), love.mouse.getY())
 end
 
 -- Updating
@@ -142,8 +142,10 @@ function love.update(dt)
     velocity = (math.dist(offsetX,offsetY,mousex,mousey))
     angle = (math.angle(offsetX,offsetY,mousex,mousey))
     degangle = math.deg(angle)
+
     if jump then
       player.img = love.graphics.newImage('assets/flying.png')
+      player.heading = getHeadingOfFox(player.x, player.y, xmousepos, ymousepos)
       if looping then
         player.velY = player.velY + (-1500 * dt)
         moveFox(dt)
@@ -196,6 +198,23 @@ function love.mousereleased(x, y, button)
       newG = anim8.newGrid(playerFrameX, playerFrameY, player.image:getWidth(), player.image:getHeight())
       animation = anim8.newAnimation(newG(1,'1-60'), (1 / 120), 'pauseAtEnd')
    end
+end
+
+function getHeadingOfFox(playerX, playerY, mouseX, mouseY)
+    local yDiff = mouseY - playerY
+    local xDiff = mouseX - playerX
+    local heading = math.atan(yDiff / xDiff)
+
+    if xDiff < 0 then
+        local radiansToAdd = math.rad(90)
+        if yDiff < 0 and heading > 0 then
+            heading = (radiansToAdd * -1) - (radiansToAdd - heading)
+        elseif yDiff > 0 and heading < 0 then
+            heading = (radiansToAdd + (radiansToAdd + heading))
+        end
+    end
+
+    return heading, yDiff, xDiff
 end
 
 function math.angle(x1,y1, x2,y2) return math.atan2(y2-y1, x2-x1) end
