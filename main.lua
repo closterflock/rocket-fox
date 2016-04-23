@@ -147,9 +147,12 @@ function love.update(dt)
     angle = (math.angle(offsetX,offsetY,mousex,mousey))
     degangle = math.deg(angle)
 
+    player.heading = getHeadingOfFox(player.x, player.y, xmousepos, ymousepos)
     if jump then
+        if love.mouse.isDown(1) then
+            boostTowardsMouse(xmousepos, ymousepos, dt)
+        end
       player.img = love.graphics.newImage('assets/flying.png')
-      player.heading = getHeadingOfFox(player.x, player.y, xmousepos, ymousepos)
       if looping then
         player.velY = player.velY + (-1500 * dt)
         moveFox(dt)
@@ -198,6 +201,15 @@ function love.mousereleased(x, y, button)
       mousey = y
       jump = true
    end
+end
+
+function boostTowardsMouse(mouseX, mouseY, dt)
+    player.velX = player.velX + math.cos(player.heading) * player.acceleration * dt
+    player.velY = player.velY - math.sin(player.heading) * player.acceleration * dt
+    -- player.velX = player.velX + math.sin(player.heading) * player.acceleration * dt
+	-- player.velY = player.velY - math.cos(player.heading) * -player.acceleration * dt
+    -- print(player.velX)
+    -- print(player.velY)
 end
 
 function getHeadingOfFox(playerX, playerY, mouseX, mouseY)
