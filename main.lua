@@ -142,7 +142,6 @@ function love.update(dt)
     velocity = (math.dist(offsetX,offsetY,mousex,mousey))
     angle = (math.angle(offsetX,offsetY,mousex,mousey))
     degangle = math.deg(angle)
-    player.heading = getAngleOfMouse(player.x, player.y, xmousepos, ymousepos)
     player.heading = getHeadingOfFox(player.x, player.y, xmousepos, ymousepos)
 
     if jump then
