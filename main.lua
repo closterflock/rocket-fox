@@ -122,7 +122,6 @@ function love.update(dt)
         player.heading = getHeadingOfFox(player.x, player.y, xmousepos, ymousepos)
         player.img = love.graphics.newImage('assets/flying.png')
         if love.mouse.isDown(1) then
-            print('clicking')
             boostTowardsMouse(xmousepos, ymousepos, dt)
         end
         if looping then
