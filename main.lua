@@ -31,7 +31,7 @@ function love.load(arg)
         heading = 0,
         velX = 1,
         velY = 1,
-        acceleration = 20,
+        acceleration = 1500,
     }
 
     win = false
