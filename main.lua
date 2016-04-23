@@ -8,11 +8,11 @@ function love.load(arg)
     -- loads the two backgrounds and the player
     backgroundimg = love.graphics.newImage('assets/background.jpg')
 
-    playerFrameX = 125
-    playerFrameY = 70
+    playerFrameX = 124
+    playerFrameY = 69
     local playerImage = love.graphics.newImage('assets/idle.png')
     flyingImage = love.graphics.newImage('assets/flying.png')
-    local g = anim8.newGrid(playerFrameX, playerFrameY, playerImage:getWidth(), playerImage:getHeight())
+    local g = anim8.newGrid(playerFrameX, playerFrameY, playerImage:getWidth(), playerImage:getHeight(), 0, 0, 1)
     animation = anim8.newAnimation(
         g(
             '1-7', '1-8',
@@ -31,7 +31,7 @@ function love.load(arg)
         heading = 0,
         velX = 1,
         velY = 1,
-        acceleration = 20,
+        acceleration = 1500,
     }
 
     win = false
@@ -147,11 +147,14 @@ function love.update(dt)
     angle = (math.angle(offsetX,offsetY,mousex,mousey))
     degangle = math.deg(angle)
 
+    player.heading = getHeadingOfFox(player.x, player.y, xmousepos, ymousepos)
     if jump then
+        if love.mouse.isDown(1) then
+            boostTowardsMouse(xmousepos, ymousepos, dt)
+        end
       player.img = love.graphics.newImage('assets/flying.png')
-      player.heading = getHeadingOfFox(player.x, player.y, xmousepos, ymousepos)
       if looping then
-        player.velY = player.velY + (-1500 * dt)
+        player.velY = player.velY + (-500 * dt)
         moveFox(dt)
         if player.y > 550 then
           looping = false
@@ -159,8 +162,8 @@ function love.update(dt)
         end
       end
       if firstloop then
-          player.velY = 3*(startingY - mousey)
-          player.velX = 3*(mousex - startingX)
+          player.velY = 1.25 * (startingY - mousey)
+          player.velX = 1.25 * (mousex - startingX)
           startingVelY = player.velY
           if player.velX < 800 then
             player.velX = player.velX
@@ -194,14 +197,19 @@ end
 --gets the position of mouse release
 function love.mousereleased(x, y, button)
    if button == 1 then
-       print('MOUSE RELEASE')
       mousex = x
       mousey = y
       jump = true
-      player.image = flyingImage
-      newG = anim8.newGrid(playerFrameX, playerFrameY, player.image:getWidth(), player.image:getHeight())
-      animation = anim8.newAnimation(newG(1,'1-60'), (1 / 120), 'pauseAtEnd')
    end
+end
+
+function boostTowardsMouse(mouseX, mouseY, dt)
+    player.velX = player.velX + math.cos(player.heading) * player.acceleration * dt
+    player.velY = player.velY - math.sin(player.heading) * player.acceleration * dt
+    -- player.velX = player.velX + math.sin(player.heading) * player.acceleration * dt
+	-- player.velY = player.velY - math.cos(player.heading) * -player.acceleration * dt
+    -- print(player.velX)
+    -- print(player.velY)
 end
 
 function getHeadingOfFox(playerX, playerY, mouseX, mouseY)
