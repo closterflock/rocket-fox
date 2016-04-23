@@ -85,7 +85,7 @@ function love.draw(dt)
     --     love.graphics.print("Jumping", 50, 210)
     -- end
     --
-    -- love.graphics.line(startingX, startingY, mousex, mousey)
+    love.graphics.line(player.x, player.y, love.mouse.getX(), love.mouse.getY())
 end
 
 -- Updating
@@ -142,6 +142,7 @@ function love.update(dt)
     velocity = (math.dist(offsetX,offsetY,mousex,mousey))
     angle = (math.angle(offsetX,offsetY,mousex,mousey))
     degangle = math.deg(angle)
+    player.heading = getAngleOfMouse(player.x, player.y, xmousepos, ymousepos)
     if jump then
       player.img = love.graphics.newImage('assets/flying.png')
       if looping then
