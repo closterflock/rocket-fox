@@ -8,11 +8,11 @@ function love.load(arg)
     -- loads the two backgrounds and the player
     backgroundimg = love.graphics.newImage('assets/background.jpg')
 
-    playerFrameX = 125
-    playerFrameY = 70
+    playerFrameX = 124
+    playerFrameY = 69
     local playerImage = love.graphics.newImage('assets/idle.png')
     flyingImage = love.graphics.newImage('assets/flying.png')
-    local g = anim8.newGrid(playerFrameX, playerFrameY, playerImage:getWidth(), playerImage:getHeight())
+    local g = anim8.newGrid(playerFrameX, playerFrameY, playerImage:getWidth(), playerImage:getHeight(), 0, 0, 1)
     animation = anim8.newAnimation(
         g(
             '1-7', '1-8',
