@@ -8,12 +8,16 @@ function love.load(arg)
     -- loads the two backgrounds and the player
     backgroundimg = love.graphics.newImage('assets/background.jpg')
 
-    playerFrameX = 250
-    playerFrameY = 120
+    playerFrameX = 125
+    playerFrameY = 70
     local playerImage = love.graphics.newImage('assets/idle.png')
     flyingImage = love.graphics.newImage('assets/flying.png')
     local g = anim8.newGrid(playerFrameX, playerFrameY, playerImage:getWidth(), playerImage:getHeight())
-    animation = anim8.newAnimation(g(1,'1-60', 1, '60-1'), (1 / 25))
+    animation = anim8.newAnimation(
+        g(
+            '1-7', '1-8',
+            '1-4', 9
+        ), (1 / 60))
 
     bunnyImg = love.graphics.newImage('assets/bunny.png')
 
@@ -22,7 +26,7 @@ function love.load(arg)
 
     player = {
         x = offsetX,
-        y = 504,
+        y = 529,
         image = playerImage,
         heading = 0,
         velX = 1,
