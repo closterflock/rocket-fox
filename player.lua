@@ -15,15 +15,34 @@ local starting = {
     y = 529
 }
 
+function regenerateCrouchAnimation(grid)
+    return anim8.newAnimation(grid('1-7', '1-8','1-3', 9), (1 / 59), 'pauseAtEnd')
+end
+
+function regenerateCrouchToFlyingAnimation(grid, callback)
+    print('crouch to flying')
+    return anim8.newAnimation(grid('1-7', '1-8', '1-3', 9), (1 / 59), callback)
+end
+
 -- idle image, grid, and animation
 local idleImage = love.graphics.newImage('assets/idle.png')
 local idleGrid = anim8.newGrid(frameSize.x, frameSize.y, idleImage:getWidth(), idleImage:getHeight(), 0, 0, 1)
 local idleAnimation = anim8.newAnimation(idleGrid('1-7', '1-8','1-4', 9), (1 / 60))
 
+-- crouch image, grid, and animation
+local crouchImage = love.graphics.newImage('assets/crouch.png')
+local crouchGrid = anim8.newGrid(frameSize.x, frameSize.y, crouchImage:getWidth(), crouchImage:getHeight(), 0, 0, 1)
+local crouchAnimation = regenerateCrouchAnimation(crouchGrid)
+
+-- crouchToFlying image, grid, and animation
+local crouchToFlyingImage = love.graphics.newImage('assets/crouch-to-flying.png')
+local crouchToFlyingGrid = anim8.newGrid(frameSize.x, frameSize.y, crouchToFlyingImage:getWidth(), crouchToFlyingImage:getHeight(), 0, 0, 1)
+local crouchToFlyingAnimation = regenerateCrouchToFlyingAnimation(crouchToFlyingGrid)
+
 -- flying image, grid, and animation
 local flyingImage = love.graphics.newImage('assets/flying.png')
 local flyingGrid = anim8.newGrid(frameSize.x, frameSize.y, flyingImage:getWidth(), flyingImage:getHeight(), 0, 0, 1)
-local flyingAnimation = anim8.newAnimation(flyingGrid('1-7', '1-8','1-4', 9), (1 / 60))
+local flyingAnimation = anim8.newAnimation(flyingGrid('1-7', '1-8','1-3', 9), (1 / 59))
 
 local player = {
     x = offsets.x,
@@ -48,8 +67,19 @@ function player:setIdleAnimation()
     self:setImageAndAnimation(idleImage, idleAnimation)
 end
 
+function player:transitionToFlying()
+    local callback = function() self:setFlyingAnimation() end
+    crouchToFlyingAnimation = regenerateCrouchToFlyingAnimation(crouchToFlyingGrid, callback)
+    self:setImageAndAnimation(crouchToFlyingImage, crouchToFlyingAnimation)
+end
+
 function player:setFlyingAnimation()
     self:setImageAndAnimation(flyingImage, flyingAnimation)
+end
+
+function player:regenerateCrouchAnimation()
+    crouchAnimation = regenerateCrouchAnimation(crouchGrid)
+    self:setImageAndAnimation(crouchImage, crouchAnimation)
 end
 
 function player:draw()
@@ -141,7 +171,7 @@ function player:mouseReleased(mouseX, mouseY, button)
             self:initialJump(mouseX, mouseY)
             self.slingshot = false
             self.flying = true
-            self:setFlyingAnimation()
+            self:transitionToFlying()
         end
     end
 end
@@ -153,6 +183,7 @@ function player:mousePressed(mouseX, mouseY, button)
                 print('slingshot mode')
                 self.standing = false
                 self.slingshot = true
+                self:regenerateCrouchAnimation()
             end
         end
     end
