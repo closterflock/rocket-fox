@@ -90,49 +90,6 @@ function love.update(dt)
     end
 
     movebunnys(dt)
-
-    xmousepos = love.mouse.getX()
-    ymousepos = love.mouse.getY()
-    -- velocity = (math.dist(offsetX,offsetY,mousex,mousey))
-    -- angle = (math.angle(offsetX,offsetY,mousex,mousey))
-    -- degangle = math.deg(angle)
-
-    if flying then
-        player.heading = getHeadingOfFox(player.x, player.y, xmousepos, ymousepos)
-        player.img = love.graphics.newImage('assets/flying.png')
-        if love.mouse.isDown(1) then
-            boostTowardsMouse(xmousepos, ymousepos, dt)
-        end
-        if looping then
-            player.velY = player.velY + (-500 * dt)
-            moveFox(dt)
-            if player.y > 550 then
-                looping = false
-                done = true
-            end
-        end
-        if firstloop then
-            player.velY = -5*(player.getStartingY() - mousey)
-            player.velX = -5*(mousex - player.getStartingX())
-            startingVelY = player.velY
-            if player.velX > -800 then
-                player.velX = 1*player.velX
-            elseif player.velX < -800 then
-                player.velX = 800
-            end
-            if player.velY < 1000 then
-                player.velY = player.velY
-            elseif player.velY > 1000 then
-                player.velY = 1000
-            end
-            firstloop = false
-            looping = true
-        end
-    end
-    if done then
-        flying = false
-        done = true
-    end
 end
 
 function movebunnys(dt)
@@ -171,60 +128,10 @@ function movebunnys(dt)
     end
 end
 
-function moveFox(dt)
-    player.x = player.x + player.velX * dt
-    player.y = (player.y - player.velY * dt)
-end
-
---gets the position of mouse release
 function love.mousereleased(x, y, button)
-    if button == 1 then
-        if slingshot then
-            mousex = x
-            mousey = y
-            slingshot = false
-            flying = true
-        end
-    end
+    player:mouseReleased(x, y, button)
 end
 
 function love.mousepressed(x, y, button, istouch)
-    if button == 1 then -- the primary button
-        if standing then
-            if xmousepos > player.x - 250 and xmousepos < player.x + 250 and ymousepos > 460 and ymousepos < 560 then
-                standing = false
-                slingshot = true
-            end
-        end
-    end
-end
-
-function boostTowardsMouse(mouseX, mouseY, dt)
-    player.velX = player.velX + math.cos(player.heading) * player.acceleration * dt
-    player.velY = player.velY - math.sin(player.heading) * player.acceleration * dt
-end
-
-function getHeadingOfFox(playerX, playerY, mouseX, mouseY)
-    local yDiff = mouseY - playerY
-    local xDiff = mouseX - playerX
-    local heading = math.atan(yDiff / xDiff)
-
-    if xDiff < 0 then
-        local radiansToAdd = math.rad(90)
-        if yDiff < 0 and heading > 0 then
-            heading = (radiansToAdd * -1) - (radiansToAdd - heading)
-        elseif yDiff > 0 and heading < 0 then
-            heading = (radiansToAdd + (radiansToAdd + heading))
-        end
-    end
-
-    return heading, yDiff, xDiff
-end
-
-function math.angle(x1,y1, x2,y2)
-    return math.atan2(y2-y1, x2-x1)
-end
-
-function math.dist(x1,y1, x2,y2)
-        return ((x2-x1)^2+(y2-y1)^2)^0.5
+    player:mousePressed(x, y, button)
 end
