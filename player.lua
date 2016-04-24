@@ -20,6 +20,11 @@ local idleImage = love.graphics.newImage('assets/idle.png')
 local idleGrid = anim8.newGrid(frameSize.x, frameSize.y, idleImage:getWidth(), idleImage:getHeight(), 0, 0, 1)
 local idleAnimation = anim8.newAnimation(idleGrid('1-7', '1-8','1-4', 9), (1 / 60))
 
+-- flying image, grid, and animation
+local flyingImage = love.graphics.newImage('assets/flying.png')
+local flyingGrid = anim8.newGrid(frameSize.x, frameSize.y, flyingImage:getWidth(), flyingImage:getHeight(), 0, 0, 1)
+local flyingAnimation = anim8.newAnimation(flyingGrid('1-7', '1-8','1-4', 9), (1 / 60))
+
 local player = {
     x = offsets.x,
     y = 529,
@@ -34,12 +39,17 @@ local player = {
     flying = false
 }
 
-function player:setIdleAnimation()
-    self.animation = idleAnimation
+function player:setImageAndAnimation(image, animation)
+    self.image = image
+    self.animation = animation
 end
 
-function player:setFlying()
-    self.flying = true
+function player:setIdleAnimation()
+    self:setImageAndAnimation(idleImage, idleAnimation)
+end
+
+function player:setFlyingAnimation()
+    self:setImageAndAnimation(flyingImage, flyingAnimation)
 end
 
 function player:draw()
@@ -131,6 +141,7 @@ function player:mouseReleased(mouseX, mouseY, button)
             self:initialJump(mouseX, mouseY)
             self.slingshot = false
             self.flying = true
+            self:setFlyingAnimation()
         end
     end
 end
