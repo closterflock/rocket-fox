@@ -1,4 +1,5 @@
 anim8 = require 'anim8'
+player = require 'player'
 
 function love.load(arg)
     bunny1up = true
@@ -18,25 +19,15 @@ function love.load(arg)
     mousey = 1
     angledeg = 0
 
-    playerFrameX = 250
-    playerFrameY = 120
-
     width = love.graphics.getWidth()
     height = love.graphics.getHeight()
 
     -- loads the two backgrounds and the player
     backgroundimg = love.graphics.newImage('assets/background.jpg')
 
-    playerFrameX = 124
-    playerFrameY = 69
-    local playerImage = love.graphics.newImage('assets/idle.png')
-    flyingImage = love.graphics.newImage('assets/flying.png')
-    local g = anim8.newGrid(playerFrameX, playerFrameY, playerImage:getWidth(), playerImage:getHeight(), 0, 0, 1)
-
     local bunnyImage = love.graphics.newImage('assets/bunnybunnybunny.png')
     local bunnyG = anim8.newGrid(95, 78, bunnyImage:getWidth(), bunnyImage:getHeight())
 
-    animation = anim8.newAnimation(g('1-7', '1-8','1-4', 9), (1 / 60))
     bunnyAnimation = anim8.newAnimation(bunnyG('1-7', '1-8','1-4', 9), (1 / 60))
 
     bunny1 = {
@@ -47,34 +38,18 @@ function love.load(arg)
         VelY = 50,
     }
 
-    offsetX = playerFrameX / 2
-    offsetY = playerFrameY / 2
-
-    player = {
-        x = offsetX,
-        y = 529,
-        image = playerImage,
-        heading = 0,
-        velX = 1,
-        velY = 1,
-        acceleration = 750,
-    }
-
-    startingX = player.x
-    startingY = player.y
-
     love.graphics.setNewFont(30)
-
 end
 
 --draws the objects we loaded above and prints the info I want
-function love.draw(dt)
+function love.draw()
     love.graphics.draw(backgroundimg)
+    player:draw()
     if bunny1alive then
         bunnyAnimation:draw(bunny1.image, bunny1.x, bunny1.y)
     end
 
-    animation:draw(player.image, player.x, player.y, player.heading, 1, 1, offsetX, offsetY)
+    -- animation:draw(player.image, player.x, player.y, player.heading, 1, 1, offsetX, offsetY)
 
     if standing then
         love.graphics.print("Standing: ", 400, 40)
@@ -107,8 +82,8 @@ function love.draw(dt)
 end
 
 function love.update(dt)
-    animation:update(dt)
     bunnyAnimation:update(dt)
+    player:update(dt)
 
     if love.keyboard.isDown('escape') then
        love.event.push('quit')
@@ -118,9 +93,9 @@ function love.update(dt)
 
     xmousepos = love.mouse.getX()
     ymousepos = love.mouse.getY()
-    velocity = (math.dist(offsetX,offsetY,mousex,mousey))
-    angle = (math.angle(offsetX,offsetY,mousex,mousey))
-    degangle = math.deg(angle)
+    -- velocity = (math.dist(offsetX,offsetY,mousex,mousey))
+    -- angle = (math.angle(offsetX,offsetY,mousex,mousey))
+    -- degangle = math.deg(angle)
 
     if flying then
         player.heading = getHeadingOfFox(player.x, player.y, xmousepos, ymousepos)
@@ -137,8 +112,8 @@ function love.update(dt)
             end
         end
         if firstloop then
-            player.velY = -5*(startingY - mousey)
-            player.velX = -5*(mousex - startingX)
+            player.velY = -5*(player.getStartingY() - mousey)
+            player.velX = -5*(mousex - player.getStartingX())
             startingVelY = player.velY
             if player.velX > -800 then
                 player.velX = 1*player.velX
