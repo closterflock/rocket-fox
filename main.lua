@@ -32,10 +32,12 @@ function love.load(arg)
     local playerImage = love.graphics.newImage('assets/idle.png')
     flyingImage = love.graphics.newImage('assets/flying.png')
     local g = anim8.newGrid(playerFrameX, playerFrameY, playerImage:getWidth(), playerImage:getHeight(), 0, 0, 1)
+
     local bunnyImage = love.graphics.newImage('assets/bunnybunnybunny.png')
     local bunnyG = anim8.newGrid(95, 78, bunnyImage:getWidth(), bunnyImage:getHeight())
+
     animation = anim8.newAnimation(g('1-7', '1-8','1-4', 9), (1 / 60))
-    bunnyAnimation = anim8.newAnimation(bunnyG('1-7', '1-8','1-4', 9), 1/60)
+    bunnyAnimation = anim8.newAnimation(bunnyG('1-7', '1-8','1-4', 9), (1 / 60))
 
     bunny1 = {
         x = 1050,
@@ -69,7 +71,7 @@ end
 function love.draw(dt)
     love.graphics.draw(backgroundimg)
     if bunny1alive then
-        bunnyAnimation:draw(bunnyImage, bunny1.x, bunny1.y)
+        bunnyAnimation:draw(bunny1.image, bunny1.x, bunny1.y)
     end
 
     animation:draw(player.image, player.x, player.y, player.heading, 1, 1, offsetX, offsetY)
@@ -106,6 +108,7 @@ end
 
 function love.update(dt)
     animation:update(dt)
+    bunnyAnimation:update(dt)
 
     if love.keyboard.isDown('escape') then
        love.event.push('quit')
